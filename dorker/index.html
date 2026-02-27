@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>haxclaw v1.0.1 // ADVANCED RECON ENGINE</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        premium: {
+                            bg: '#fcfcfc',
+                            surface: '#ffffff',
+                            accent: '#0066cc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="scanline"></div>
+
+    <!-- LAUNCH OVERLAY -->
+    <div class="launch-overlay" id="launch-overlay">
+        <div class="launch-modal">
+            <h3>Launching Sessions</h3>
+            <div class="launch-progress-bar">
+                <div class="launch-progress-fill" id="launch-fill" style="width: 0%"></div>
+            </div>
+            <div class="launch-status" id="launch-status">Preparing...</div>
+            <button class="launch-cancel-btn" onclick="cancelLaunch()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS MODAL -->
+    <div class="kb-modal" id="kb-modal">
+        <div class="kb-modal-content">
+            <div class="kb-modal-title">Keyboard Shortcuts</div>
+            <div class="kb-list">
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">Ctrl</span><span class="kb-key">K</span></div>
+                    <span class="kb-desc">Focus target input</span>
+                </div>
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">Ctrl</span><span class="kb-key">F</span></div>
+                    <span class="kb-desc">Search dorks</span>
+                </div>
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">Ctrl</span><span class="kb-key">1-0</span></div>
+                    <span class="kb-desc">Switch tabs</span>
+                </div>
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">Ctrl</span><span class="kb-key">S</span></div>
+                    <span class="kb-desc">Save target</span>
+                </div>
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">Escape</span></div>
+                    <span class="kb-desc">Close modals</span>
+                </div>
+                <div class="kb-item">
+                    <div class="kb-keys"><span class="kb-key">?</span></div>
+                    <span class="kb-desc">Show shortcuts</span>
+                </div>
+            </div>
+            <button class="kb-close" onclick="closeKbModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- TOAST STACK -->
+    <div class="toast-stack" id="toast-stack"></div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="header-controls">
+                <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" id="theme-btn">Mode</button>
+                <button class="icon-btn" onclick="showKbModal()" title="Keyboard shortcuts">Keys</button>
+                <button class="icon-btn" onclick="switchTab('export')" title="Export">Export</button>
+            </div>
+            <div class="version-badge">VERSION 1.0.0</div>
+            <h1>haxclaw</h1>
+            <p class="subtitle">PREMIUM RECONNAISSANCE SUITE — PROFESSIONAL EDITION</p>
+            <p class="kb-hint">Shortcut: <span>Ctrl+K</span> focus · <span>Ctrl+F</span> search dorks ·
+                <span>?</span> guide
+            </p>
+        </header>
+
+        <!-- TARGET BAR -->
+        <div class="search-section">
+            <div class="input-group">
+                <label class="input-label" for="target">// target domain</label>
+                <div class="target-row">
+                    <input type="text" id="target" class="target-input"
+                        placeholder="https://www.target.com/ or target.com" autocomplete="off" spellcheck="false"
+                        oninput="validateInput(this)" onkeydown="handleEnter(event)" />
+                    <button class="save-target-btn" onclick="saveTarget()">+ Save</button>
+                </div>
+                <div class="input-hint" id="input-hint">Paste any URL — auto-cleaned. Press Enter to lock.</div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat"><span class="stat-num" id="stat-total">0</span><span class="stat-label">Dorks</span>
+                </div>
+                <div class="stat"><span class="stat-num">8</span><span class="stat-label">Categories</span></div>
+                <div class="stat"><span class="stat-num" id="search-count">0</span><span class="stat-label">Fired</span>
+                </div>
+                <div class="stat"><span class="stat-num" id="checklist-pct">0%</span><span
+                        class="stat-label">Recon</span></div>
+                <div class="stat"><span class="stat-num" id="fav-count">0</span><span
+                        class="stat-label">Favorites</span></div>
+            </div>
+        </div>
+
+        <!-- SAVED TARGETS ROW -->
+        <div id="targets-row-wrap" class="targets-row">
+            <span class="targets-label">Targets:</span>
+            <div id="targets-pills"></div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="dorks" onclick="switchTab('dorks', this)">🎯 Dork Engine</button>
+            <button class="tab-btn" data-tab="favorites" onclick="switchTab('favorites', this)">⭐ Favorites</button>
+            <button class="tab-btn" data-tab="builder" onclick="switchTab('builder', this)">🔧 Builder</button>
+            <button class="tab-btn" data-tab="checklist" onclick="switchTab('checklist', this)">✅ Checklist</button>
+            <button class="tab-btn" data-tab="notes" onclick="switchTab('notes', this)">📝 Notes</button>
+            <button class="tab-btn" data-tab="scope" onclick="switchTab('scope', this)">🎯 Scope</button>
+            <button class="tab-btn" data-tab="export" onclick="switchTab('export', this)"> Export</button>
+            <button class="tab-btn" data-tab="methodology" onclick="switchTab('methodology', this)">🔥
+                Methodology</button>
+            <button class="tab-btn" data-tab="exploits" onclick="switchTab('exploits', this)">💣 Exploits</button>
+        </div>
+
+        <!-- TAB PANELS -->
+        <div class="tab-panel active" id="tab-dorks">
+            <div class="launch-bar">
+                <button class="launch-all-btn" onclick="launchAll()">⚡ Fire All Dorks</button>
+                <button class="launch-cat-btn" onclick="launchCategory()">🔥 Fire Visible</button>
+                <button class="launch-cat-btn" onclick="launchFavorites()">⭐ Fire Favorites</button>
+                <span class="delay-note">// 800ms delay between tabs</span>
+            </div>
+            <div class="filter-bar">
+                <button class="filter-btn active" data-cat="all" onclick="filterCategory('all')">All</button>
+                <button class="filter-btn" data-cat="recon" onclick="filterCategory('recon')">🔍 Recon</button>
+                <button class="filter-btn" data-cat="files" onclick="filterCategory('files')">📁 Files</button>
+                <button class="filter-btn" data-cat="vulns" onclick="filterCategory('vulns')">⚡ Vulns</button>
+                <button class="filter-btn" data-cat="cms" onclick="filterCategory('cms')">🔧 CMS</button>
+                <button class="filter-btn" data-cat="cloud" onclick="filterCategory('cloud')">☁️ Cloud</button>
+                <button class="filter-btn" data-cat="api" onclick="filterCategory('api')">🔌 API</button>
+                <button class="filter-btn" data-cat="osint" onclick="filterCategory('osint')">🌐 OSINT</button>
+                <button class="filter-btn" data-cat="flash" onclick="filterCategory('flash')">📼 Archive</button>
+                <input type="text" class="search-filter-input" id="dork-search" placeholder="Search dorks..."
+                    oninput="searchDorks(this.value)" />
+            </div>
+            <div id="dork-sections-container"></div>
+            <div class="history-section">
+                <div class="history-header">
+                    <span class="section-title">// session history</span>
+                    <div class="section-actions">
+                        <button class="small-btn green" onclick="exportHistory()">Export</button>
+                        <button class="small-btn" onclick="clearHistory()">Clear</button>
+                    </div>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div class="empty-history">No searches yet.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-favorites">
+            <div class="launch-bar">
+                <button class="launch-all-btn" onclick="launchFavorites()">⭐ Fire All Favorites</button>
+            </div>
+            <div id="favorites-grid" class="btn-grid">
+                <div class="fav-empty" style="grid-column: 1/-1">No favorites yet.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-builder">
+            <div class="dork-builder">
+                <div class="builder-title">🔧 Custom Dork Builder</div>
+                <div class="builder-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="builder-group flex flex-col gap-1">
+                        <label class="text-[10px] uppercase tracking-widest text-[var(--muted)]">Operator</label>
+                        <select
+                            class="builder-select bg-[var(--surface2)] border border-[var(--border)] text-[var(--text)] p-2 rounded focus:border-[var(--accent)] outline-none"
+                            id="b-op" onchange="updateBuilderPreview()">
+                            <option value="site:">site:</option>
+                            <option value="inurl:">inurl:</option>
+                            <option value="intitle:">intitle:</option>
+                            <option value="filetype:">filetype:</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="builder-group flex flex-col gap-1">
+                        <label class="text-[10px] uppercase tracking-widest text-[var(--muted)]">Value</label>
+                        <input
+                            class="builder-input bg-[var(--surface2)] border border-[var(--border)] text-[var(--text)] p-2 rounded focus:border-[var(--accent)] outline-none"
+                            id="b-val" placeholder="e.g. .env" oninput="updateBuilderPreview()" />
+                    </div>
+                </div>
+                <div class="builder-preview mt-4 p-3 bg-[var(--bg)] border border-[var(--border2)] rounded font-mono text-[var(--accent)]"
+                    id="builder-preview">Fill fields above...</div>
+                <div class="builder-btns flex gap-2 mt-4">
+                    <button
+                        class="builder-btn bg-[var(--accent)] text-[#000] font-bold p-2 px-6 rounded hover:opacity-80"
+                        onclick="runBuilderSearch()">⚡ Run</button>
+                    <button class="builder-btn border border-[var(--border)] p-2 px-6 rounded"
+                        onclick="saveBuilderDork()">💾 Save</button>
+                </div>
+            </div>
+            <div class="dork-builder mt-4">
+                <div class="builder-title">💾 Saved Custom Dorks <span id="saved-count"></span></div>
+                <div class="saved-dorks-list mt-2 space-y-2" id="saved-dorks-list"></div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-checklist">
+            <div class="checklist-progress bg-[var(--surface)] p-4 rounded mb-4 flex items-center gap-4">
+                <div class="flex-1">
+                    <div class="progress-bar-wrap h-2 bg-[var(--bg)] rounded overflow-hidden">
+                        <div class="progress-bar-fill h-full bg-[var(--accent)] transition-all duration-500"
+                            id="checklist-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <span class="text-[var(--accent)] font-bold" id="checklist-pct">0%</span>
+                <span class="text-[var(--muted)] text-xs" id="checklist-prog-text">0/0</span>
+                <button class="checklist-reset-btn text-[10px] border border-[var(--border)] p-1 px-3 rounded"
+                    onclick="resetChecklist()">Reset</button>
+            </div>
+            <div id="checklist-container"></div>
+        </div>
+
+        <div class="tab-panel" id="tab-notes">
+            <div class="notes-panel bg-[var(--surface)] p-4 rounded">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-[var(--accent)] font-bold">📝 Recon Notes</span>
+                    <div class="flex gap-2">
+                        <button class="small-btn bg-[var(--accent3)] text-[#000] text-[10px] font-bold p-1 px-3 rounded"
+                            onclick="exportNotes()">Export</button>
+                        <button class="small-btn border border-[var(--border)] text-[10px] p-1 px-3 rounded"
+                            onclick="clearNotes()">Clear</button>
+                    </div>
+                </div>
+                <textarea id="notes-area"
+                    class="w-full h-80 bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] p-4 rounded focus:border-[var(--accent)] outline-none font-mono"
+                    placeholder="Take recon notes here..." oninput="saveNotes()"></textarea>
+                <div class="flex justify-between mt-2 text-[10px] text-[var(--muted)]">
+                    <span id="notes-char-count">0 chars</span>
+                    <span id="notes-save-status">Saved</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-scope">
+            <div class="scope-panel bg-[var(--surface)] p-4 rounded">
+                <div class="builder-title">🎯 Scope Checker</div>
+                <textarea id="scope-input"
+                    class="w-full h-32 bg-[var(--bg)] border border-[var(--border)] text-[var(--text)] p-3 rounded mt-2 outline-none"
+                    placeholder="*.example.com" oninput="saveScopeList()"></textarea>
+                <div class="mt-4 flex gap-4">
+                    <input class="flex-1 bg-[var(--bg)] border border-[var(--border)] p-2 rounded outline-none"
+                        id="scope-check-input" placeholder="Check domain..." oninput="checkScope()" />
+                    <div id="scope-result" class="flex-1 p-2 font-mono"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-export">
+            <div class="export-panel bg-[var(--surface)] p-6 rounded">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="export-grid">
+                    <div class="export-card border border-[var(--border)] p-4 rounded hover:bg-[var(--surface2)] cursor-pointer text-center"
+                        onclick="runExport('txt')">TXT</div>
+                    <div class="export-card border border-[var(--border)] p-4 rounded hover:bg-[var(--surface2)] cursor-pointer text-center"
+                        onclick="runExport('markdown')">MD</div>
+                    <div class="export-card border border-[var(--border)] p-4 rounded hover:bg-[var(--surface2)] cursor-pointer text-center"
+                        onclick="runExport('json')">JSON</div>
+                    <div class="export-card border border-[var(--border)] p-4 rounded hover:bg-[var(--surface2)] cursor-pointer text-center"
+                        onclick="runExport('urls')">URLS</div>
+                </div>
+                <div class="export-preview-area mt-6 h-64 overflow-auto border border-[var(--border2)] rounded p-4 font-mono text-xs hidden"
+                    id="export-preview"></div>
+                <div class="flex gap-2 mt-4 hidden" id="export-action-btns">
+                    <button class="bg-[var(--accent)] text-[#000] font-bold p-2 px-6 rounded"
+                        onclick="downloadExport()">Download</button>
+                    <button class="border border-[var(--border)] p-2 px-6 rounded" onclick="copyExport()">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-methodology">
+            <div class="methodology-panel">
+                <div class="methodology-header">
+                    <div class="builder-title">🔥 Bug Bounty Recon Methodology</div>
+                    <div class="methodology-target-info">
+                        Target: <span id="method-target" class="method-target-value">Not set</span>
+                        <button class="method-generate-btn" onclick="generateAllCommands()">⚡ Generate All
+                            Commands</button>
+                    </div>
+                </div>
+
+                <div class="methodology-steps">
+                    <!-- Step 1: Subdomain Discovery -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">01</span>
+                            <span class="method-step-title">🌐 Subdomain Discovery</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Subfinder</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-subfinder">subfinder -d TARGET -all -o subdomains.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-subfinder')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Amass</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-amass">amass enum -passive -d TARGET -o amass.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-amass')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Assetfinder</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-assetfinder">assetfinder --subs-only TARGET >> subdomains.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-assetfinder')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Findomain</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-findomain">findomain -t TARGET -u findomain.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-findomain')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Chaos (ProjectDiscovery)</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-chaos">chaos -d TARGET -o chaos.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-chaos')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Merge & Sort Unique</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-merge-subs">cat *.txt | sort -u > all-subdomains.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-merge-subs')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: DNS Resolution -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">02</span>
+                            <span class="method-step-title">📡 DNS Resolution & Filtering</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">DNSx - Resolve Subdomains</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-dnsx">dnsx -l all-subdomains.txt -o resolved.txt -a -resp</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-dnsx')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">PureDNS - Bruteforce</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-puredns">puredns bruteforce wordlist.txt TARGET -r resolvers.txt -w bruteforced.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-puredns')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">MassDNS</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-massdns">massdns -r resolvers.txt -t A -o S all-subdomains.txt -w massdns.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-massdns')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: HTTP Probing -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">03</span>
+                            <span class="method-step-title">🌐 HTTP Probing</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">HTTPx - Full Probe</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-httpx">httpx -l resolved.txt -o live-hosts.txt -status-code -title -tech-detect -follow-redirects</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-httpx')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">HTTPx - With Screenshots</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-httpx-ss">httpx -l resolved.txt -screenshot -o httpx-output/</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-httpx-ss')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Httprobe</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-httprobe">cat resolved.txt | httprobe -c 50 > live-urls.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-httprobe')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Port Scanning -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">04</span>
+                            <span class="method-step-title">🔍 Port Scanning</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nmap - Top Ports</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-nmap">nmap -sV -sC --top-ports 1000 -iL resolved.txt -oA nmap-scan</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-nmap')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Masscan - Fast Scan</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-masscan">masscan -iL resolved.txt -p1-65535 --rate 10000 -oG masscan.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-masscan')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Rustscan - Ultra Fast</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-rustscan">rustscan -a TARGET --ulimit 5000 -- -sV -sC -oN rustscan.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-rustscan')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Naabu - Port Discovery</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-naabu">naabu -l resolved.txt -p - -o ports.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-naabu')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Screenshots -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">05</span>
+                            <span class="method-step-title">📷 Screenshots</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Gowitness</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-gowitness">gowitness file -f live-hosts.txt -P screenshots/ --no-http</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-gowitness')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Eyewitness</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-eyewitness">eyewitness --web -f live-hosts.txt -d eyewitness-output/</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-eyewitness')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Webscreenshot</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-webscreenshot">webscreenshot -i live-hosts.txt -o screenshots/</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-webscreenshot')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Technology Detection -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">06</span>
+                            <span class="method-step-title">⚙️ Technology Detection</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Wappalyzer (CLI)</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-wappalyzer">wappalyzer https://TARGET -o tech.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-wappalyzer')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">WhatWeb</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-whatweb">whatweb -i live-hosts.txt -a 3 --log-json=whatweb.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-whatweb')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Webanalyze</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-webanalyze">webanalyze -hosts live-hosts.txt -output json > webanalyze.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-webanalyze')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Wayback & Archive -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">07</span>
+                            <span class="method-step-title">📚 Wayback & Archives</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Waybackurls</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-wayback">waybackurls TARGET > wayback.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-wayback')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">GAU (GetAllUrls)</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-gau">gau TARGET --threads 5 --o gau.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-gau')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Gauplus</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-gauplus">gauplus -t 5 -random-agent -subs TARGET > gauplus.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-gauplus')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Waymore</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-waymore">waymore -i TARGET -mode U -oU waymore.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-waymore')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 8: Content Discovery -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">08</span>
+                            <span class="method-step-title">📂 Content Discovery</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">FFUF - Directory Bruteforce</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-ffuf">ffuf -u https://TARGET/FUZZ -w /usr/share/wordlists/dirb/common.txt -mc 200,301,302,403 -o ffuf.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-ffuf')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Feroxbuster</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-ferox">feroxbuster -u https://TARGET -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -o ferox.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-ferox')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Dirsearch</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-dirsearch">dirsearch -u https://TARGET -e php,asp,aspx,jsp,html,js -o dirsearch.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-dirsearch')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Gobuster</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-gobuster">gobuster dir -u https://TARGET -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -o gobuster.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-gobuster')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 9: Parameter Discovery -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">09</span>
+                            <span class="method-step-title">🔗 Parameter Discovery</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">ParamSpider</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-paramspider">paramspider -d TARGET -o params.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-paramspider')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Arjun</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-arjun">arjun -u https://TARGET -o arjun.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-arjun')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">x8 - Hidden Params</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-x8">x8 -u https://TARGET -w params.txt -o x8.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-x8')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Unfurl - Extract Params from URLs</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-unfurl">cat wayback.txt | unfurl -u keys | sort -u > params-list.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-unfurl')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 10: JavaScript Analysis -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">10</span>
+                            <span class="method-step-title">📜 JavaScript Analysis</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Extract JS Files</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-getjs">cat wayback.txt | grep -iE "\.js$" | sort -u > js-files.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-getjs')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">LinkFinder</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-linkfinder">linkfinder -i https://TARGET -o cli > linkfinder.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-linkfinder')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">SecretFinder</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-secretfinder">secretfinder -i https://TARGET -o cli > secrets.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-secretfinder')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">JSLuice</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-jsluice">cat js-files.txt | jsluice urls | sort -u > jsluice.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-jsluice')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nuclei - JS Secrets</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-nuclei-js">nuclei -l js-files.txt -t ~/nuclei-templates/exposures/ -o js-secrets.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('nuclei-js')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 11: Vulnerability Scanning -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">11</span>
+                            <span class="method-step-title">🛡️ Vulnerability Scanning</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nuclei - Full Scan</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-nuclei">nuclei -l live-hosts.txt -t ~/nuclei-templates/ -severity critical,high,medium -o nuclei.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-nuclei')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nuclei - CVEs Only</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-nuclei-cve">nuclei -l live-hosts.txt -t ~/nuclei-templates/cves/ -o cves.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-nuclei-cve')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nikto</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-nikto">nikto -h https://TARGET -o nikto.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-nikto')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Jaeles</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-jaeles">jaeles scan -u https://TARGET -o jaeles-output/</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-jaeles')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 12: Specific Vulns -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">12</span>
+                            <span class="method-step-title">🎯 Specific Vulnerability Tests</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">XSS - Dalfox</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-dalfox">dalfox file params.txt -o xss.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-dalfox')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">SQLi - SQLMap</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-sqlmap">sqlmap -m params.txt --batch --risk 3 --level 5 -o sqli.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-sqlmap')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">SSRF - SSRFmap</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-ssrfmap">ssrfmap -r request.txt -p url -m portscan</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-ssrfmap')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">LFI - LFISuite</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-lfi">cat params.txt | gf lfi | sort -u > lfi-params.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-lfi')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Open Redirect</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-openredirect">cat params.txt | gf redirect | sort -u > redirect-params.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-openredirect')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">CORS Misconfiguration</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-cors">python3 CORScanner.py -i live-hosts.txt -o cors.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-cors')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Subdomain Takeover</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-subtakeover">subzy run --targets all-subdomains.txt --output takeover.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-subtakeover')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 13: One-Liner Combos -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">13</span>
+                            <span class="method-step-title">🚀 One-Liner Power Combos</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Full Subdomain Recon</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo1">subfinder -d TARGET -silent | dnsx -silent | httpx -silent -o live.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo1')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Find XSS Params</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo2">waybackurls TARGET | gf xss | sed 's/=.*/=/' | sort -u > xss-params.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo2')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Find SQLi Params</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo3">waybackurls TARGET | gf sqli | sed 's/=.*/=/' | sort -u > sqli-params.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo3')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Quick Nuclei Scan</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo4">subfinder -d TARGET -silent | httpx -silent | nuclei -severity critical,high</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo4')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Extract All Endpoints</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo5">cat wayback.txt gau.txt | sort -u | uro | httpx -silent -mc 200 > endpoints.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo5')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Find Sensitive Files</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-combo6">cat wayback.txt | grep -iE "\.(sql|bak|backup|log|env|config|xml|json|yml)$" | sort -u</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-combo6')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 14: Service & Version Detection -->
+                    <div class="method-step">
+                        <div class="method-step-header" onclick="toggleMethodStep(this)">
+                            <span class="method-step-num">14</span>
+                            <span class="method-step-title">📊 Service & Version Detection</span>
+                            <span class="method-step-toggle">▼</span>
+                        </div>
+                        <div class="method-step-content">
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Nmap Version Scan</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-nmap-ver">nmap -sV -sC -O TARGET -oN version-scan.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-nmap-ver')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Banner Grabbing</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-banner">nmap -sV --script=banner TARGET -oN banners.txt</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-banner')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">HTTP Headers Check</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-headers">curl -sI https://TARGET | grep -iE "server|x-powered|x-asp|x-generator"</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-headers')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">Wappalyzer Tech Stack</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd"
+                                        id="cmd-wappalyzer2">wappalyzer https://TARGET --pretty > tech-stack.json</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-wappalyzer2')">⧉</span>
+                                </div>
+                            </div>
+                            <div class="method-cmd-block">
+                                <div class="method-cmd-label">CMSeek - CMS Detection</div>
+                                <div class="method-cmd-wrap">
+                                    <code class="method-cmd" id="cmd-cmseek">cmseek -u https://TARGET --batch</code>
+                                    <span class="method-copy-btn" onclick="copyMethodCmd('cmd-cmseek')">⧉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Copy All Button -->
+                <div class="method-actions">
+                    <button class="method-copy-all-btn" onclick="copyAllCommands()">📋 Copy All Commands</button>
+                    <button class="method-export-btn" onclick="exportMethodology()"> Export as Script</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-panel" id="tab-exploits">
+            <div class="exploits-panel">
+                <div class="exploits-header">
+                    <div class="builder-title">💣 Exploit & PoC Search Engine</div>
+                    <div class="exploits-target-info">
+                        Target: <span id="exploit-target" class="method-target-value">Not set</span>
+                    </div>
+                </div>
+
+                <!-- Search Box -->
+                <div class="exploit-main-search">
+                    <div class="exploit-search-row">
+                        <input type="text" id="exploit-service-input" class="exploit-main-input"
+                            placeholder="Enter service/version (e.g., Apache 2.4.49, nginx 1.18, WordPress 5.8)">
+                        <button class="exploit-main-search-btn" onclick="searchAllExploits()">🔍 Search All
+                            Databases</button>
+                    </div>
+                    <div class="exploit-quick-tags">
+                        <span class="exploit-tag" onclick="setExploitSearch('Apache')">Apache</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('nginx')">nginx</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('WordPress')">WordPress</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('PHP')">PHP</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('MySQL')">MySQL</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('OpenSSH')">OpenSSH</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('Tomcat')">Tomcat</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('Jenkins')">Jenkins</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('Log4j')">Log4j</span>
+                        <span class="exploit-tag" onclick="setExploitSearch('Spring')">Spring</span>
+                    </div>
+                </div>
+
+                <!-- Exploit Database Categories -->
+                <div class="exploit-categories">
+
+                    <!-- GitHub & Code Repos -->
+                    <div class="exploit-category">
+                        <div class="exploit-cat-title">🐙 GitHub & Code Repositories</div>
+                        <div class="exploit-links-grid">
+                            <a href="#" class="exploit-link" onclick="openExploitDB('github-poc', event)">
+                                <span class="exploit-link-icon">🐙</span>
+                                <span class="exploit-link-name">GitHub PoC</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('github-exploit', event)">
+                                <span class="exploit-link-icon">🐱</span>
+                                <span class="exploit-link-name">GitHub Exploit</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('github-cve', event)">
+                                <span class="exploit-link-icon">💻</span>
+                                <span class="exploit-link-name">GitHub CVE</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('gitlab', event)">
+                                <span class="exploit-link-icon">🦊</span>
+                                <span class="exploit-link-name">GitLab Exploits</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('github-nuclei', event)">
+                                <span class="exploit-link-icon">☢️</span>
+                                <span class="exploit-link-name">Nuclei Templates</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('github-0day', event)">
+                                <span class="exploit-link-icon">🔴</span>
+                                <span class="exploit-link-name">GitHub 0day</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Exploit Databases -->
+                    <div class="exploit-category">
+                        <div class="exploit-cat-title">💾 Exploit Databases</div>
+                        <div class="exploit-links-grid">
+                            <a href="#" class="exploit-link" onclick="openExploitDB('exploitdb', event)">
+                                <span class="exploit-link-icon">💾</span>
+                                <span class="exploit-link-name">Exploit-DB</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('packetstorm', event)">
+                                <span class="exploit-link-icon">⚡</span>
+                                <span class="exploit-link-name">PacketStorm</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('rapid7', event)">
+                                <span class="exploit-link-icon">🚀</span>
+                                <span class="exploit-link-name">Rapid7 DB</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('0day-today', event)">
+                                <span class="exploit-link-icon">💥</span>
+                                <span class="exploit-link-name">0day.today</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('sploitus', event)">
+                                <span class="exploit-link-icon">🔥</span>
+                                <span class="exploit-link-name">Sploitus</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('vulncode', event)">
+                                <span class="exploit-link-icon">📜</span>
+                                <span class="exploit-link-name">VulnCode-DB</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- CVE & Vulnerability Databases -->
+                    <div class="exploit-category">
+                        <div class="exploit-cat-title">🛡️ CVE & Vulnerability Databases</div>
+                        <div class="exploit-links-grid">
+                            <a href="#" class="exploit-link" onclick="openExploitDB('nvd', event)">
+                                <span class="exploit-link-icon">🛡️</span>
+                                <span class="exploit-link-name">NVD/CVE</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('cvedetails', event)">
+                                <span class="exploit-link-icon">📊</span>
+                                <span class="exploit-link-name">CVE Details</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('vulners', event)">
+                                <span class="exploit-link-icon">🔍</span>
+                                <span class="exploit-link-name">Vulners</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('snyk', event)">
+                                <span class="exploit-link-icon">🔐</span>
+                                <span class="exploit-link-name">Snyk Vuln DB</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('cisa', event)">
+                                <span class="exploit-link-icon">🏛️</span>
+                                <span class="exploit-link-name">CISA KEV</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('mitre', event)">
+                                <span class="exploit-link-icon">🎯</span>
+                                <span class="exploit-link-name">MITRE CVE</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Vendor Security Advisories -->
+                    <div class="exploit-category">
+                        <div class="exploit-cat-title">🏢 Vendor Security Advisories</div>
+                        <div class="exploit-links-grid">
+                            <a href="#" class="exploit-link" onclick="openExploitDB('microsoft', event)">
+                                <span class="exploit-link-icon">🪟</span>
+                                <span class="exploit-link-name">Microsoft</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('oracle', event)">
+                                <span class="exploit-link-icon">☀️</span>
+                                <span class="exploit-link-name">Oracle</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('cisco', event)">
+                                <span class="exploit-link-icon">🖥️</span>
+                                <span class="exploit-link-name">Cisco</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('redhat', event)">
+                                <span class="exploit-link-icon">🎩</span>
+                                <span class="exploit-link-name">Red Hat</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('ubuntu', event)">
+                                <span class="exploit-link-icon">🐧</span>
+                                <span class="exploit-link-name">Ubuntu</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('debian', event)">
+                                <span class="exploit-link-icon">🌀</span>
+                                <span class="exploit-link-name">Debian</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Security Research & Intel -->
+                    <div class="exploit-category">
+                        <div class="exploit-cat-title">🔬 Security Research & Intel</div>
+                        <div class="exploit-links-grid">
+                            <a href="#" class="exploit-link" onclick="openExploitDB('google-security', event)">
+                                <span class="exploit-link-icon">🌐</span>
+                                <span class="exploit-link-name">Google P0</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('hackerone', event)">
+                                <span class="exploit-link-icon">👾</span>
+                                <span class="exploit-link-name">HackerOne</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('portswigger', event)">
+                                <span class="exploit-link-icon">📝</span>
+                                <span class="exploit-link-name">PortSwigger</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('tenable', event)">
+                                <span class="exploit-link-icon">📱</span>
+                                <span class="exploit-link-name">Tenable</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('qualys', event)">
+                                <span class="exploit-link-icon">🌟</span>
+                                <span class="exploit-link-name">Qualys</span>
+                            </a>
+                            <a href="#" class="exploit-link" onclick="openExploitDB('trendmicro', event)">
+                                <span class="exploit-link-icon">💠</span>
+                                <span class="exploit-link-name">Trend Micro</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Command Line Tools -->
+                <div class="exploit-cli-section">
+                    <div class="exploit-cat-title">💻 Command Line Tools</div>
+                    <div class="exploit-cmd-grid">
+                        <div class="method-cmd-block">
+                            <div class="method-cmd-label">Searchsploit</div>
+                            <div class="method-cmd-wrap">
+                                <code class="method-cmd exploit-cmd"
+                                    id="cmd-exp-searchsploit">searchsploit "SERVICE" --json > exploits.json</code>
+                                <span class="method-copy-btn" onclick="copyExploitCmd('cmd-exp-searchsploit')">⧉</span>
+                            </div>
+                        </div>
+                        <div class="method-cmd-block">
+                            <div class="method-cmd-label">Metasploit Search</div>
+                            <div class="method-cmd-wrap">
+                                <code class="method-cmd exploit-cmd"
+                                    id="cmd-exp-msf">msfconsole -q -x "search type:exploit SERVICE; exit"</code>
+                                <span class="method-copy-btn" onclick="copyExploitCmd('cmd-exp-msf')">⧉</span>
+                            </div>
+                        </div>
+                        <div class="method-cmd-block">
+                            <div class="method-cmd-label">Nuclei CVE Scan</div>
+                            <div class="method-cmd-wrap">
+                                <code class="method-cmd exploit-cmd"
+                                    id="cmd-exp-nuclei">nuclei -u https://EXPLOITTARGET -t ~/nuclei-templates/cves/ -severity critical,high</code>
+                                <span class="method-copy-btn" onclick="copyExploitCmd('cmd-exp-nuclei')">⧉</span>
+                            </div>
+                        </div>
+                        <div class="method-cmd-block">
+                            <div class="method-cmd-label">Nmap Vuln Scan</div>
+                            <div class="method-cmd-wrap">
+                                <code class="method-cmd exploit-cmd"
+                                    id="cmd-exp-nmap">nmap --script vuln EXPLOITTARGET -oN vuln-scan.txt</code>
+                                <span class="method-copy-btn" onclick="copyExploitCmd('cmd-exp-nmap')">⧉</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer>
+            <a href="https://www.instagram.com/un1kn0n3_h4rt/" target="_blank" class="footer-link"> unknone hart on
+                insta</a>
+        </footer>
+    </div>
+
+    <!-- Modular JS Scripts -->
+    <script src="js/data/dorks.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dork-engine.js"></script>
+    <script src="js/builder.js"></script>
+    <script src="js/methodology.js"></script>
+    <script src="js/utils.js"></script>
+
+    <script>
+        // No more dynamic fetching - fragments are inlined to support file:// protocol
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.initMethodology) window.initMethodology();
+        });
+    </script>
+</body>
+
+</html>
