@@ -1,112 +1,229 @@
 <p align="center">
-  <img src="dorker/assets/haxclaw-3d-banner.svg" alt="haxclaw 3D Banner">
+  <img src="dorker/assets/haxclaw-3d-banner.svg" alt="haxclaw Banner" width="100%">
 </p>
 
-# 🦅 haxclaw // ADVANCED RECON ENGINE
+<div align="center">
 
+# ⬡ H A X C L A W
 
-![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
-![Theme](https://img.shields.io/badge/theme-dark/light-success.svg)
-[![Live Demo](https://img.shields.io/badge/Demo-Live-brightgreen.svg)](https://lulublackhat.rf.gd/)
+### `[ ADVANCED RECON ENGINE // BUG BOUNTY EDITION ]`
 
-> **PREMIUM RECONNAISSANCE SUITE — PROFESSIONAL EDITION**
+<br>
 
-**haxclaw** is a comprehensive, client-side web application designed for security researchers, penetration testers, and bug bounty hunters. It acts as a centralized command center for your reconnaissance workflow, combining an extensive Google Dorking engine with a structured bug bounty methodology, custom tools, and session management.
+[![Version](https://img.shields.io/badge/VERSION-1.0.1-0affed?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/kishwordulal1234/hexclaw)
+[![License](https://img.shields.io/badge/LICENSE-MIT-blueviolet?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
+[![HTML](https://img.shields.io/badge/HTML-74.4%25-e34f26?style=for-the-badge&logo=html5&logoColor=white)]()
+[![JavaScript](https://img.shields.io/badge/JS-14.2%25-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)]()
+[![CSS](https://img.shields.io/badge/CSS-11.4%25-264de4?style=for-the-badge&logo=css3&logoColor=white)]()
+[![Demo](https://img.shields.io/badge/LIVE_DEMO-ONLINE-00ff88?style=for-the-badge&logo=vercel&logoColor=black)](https://lulublackhat.rf.gd/)
 
-🌐 **Live Demo:** [https://lulublackhat.rf.gd/](https://lulublackhat.rf.gd/)
+<br>
 
----
-
-## 🔥 Key Features
-
-### 🎯 Advanced Dork Engine
-Fire complex, curated Google Dorks directly from your browser. 
-- **Categories:** Recon, Files, Vulnerabilities, CMS, Cloud, API, OSINT, and Web Archive.
-- **Bulk Launch:** Fire all dorks for a specific category with a single click (with built-in rate-limit delays).
-- **Search & Filter:** Instantly find the exact dork you need.
-
-### 📋 Bug Bounty Methodology Guide
-A step-by-step, actionable recon methodology with copy-paste commands for industry-standard tools.
-- Auto-generates commands for your specific target domain.
-- Covers Subdomain Discovery, Port Scanning, HTTP Probing, Vulnerability Scanning, JS Analysis, and more.
-
-### 🔧 Custom Dork Builder
-Build, test, and save your own custom dorks using intuitive dropdowns and inputs (e.g., `site:`, `inurl:`, `intitle:`).
-
-### 🛠️ Built-in Recon Tools
-- **Scope Checker:** Paste your in-scope domains/wildcards and instantly verify if a specific URL is in scope.
-- **Notes & Checklist:** Keep track of your progress and findings natively within the app.
-- **Export System:** Export your dork history, notes, and targets to TXT, MD, JSON, or Raw URLs.
-
-### 💻 Pro Workflows
-- **Target Management:** Save multiple targets and switch between them instantly.
-- **Favorites:** Star your most-used dorks for quick access.
-- **Keyboard Shortcuts:** Power-user friendly (e.g., `Ctrl+K` to focus target, `1-0` for tabs).
-- **Dark/Light Mode:** First-class premium UI adaptable to your preference.
-
----
-
-## 🚀 Getting Started
-
-Since **haxclaw** is entirely client-side, getting started is as simple as opening the `index.html` file or visiting the live URL.
-
-### Local Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/dorker.git
-   ```
-2. Open the directory:
-   ```bash
-   cd dorker
-   ```
-3. Open `index.html` in your favorite modern web browser.
-
-No servers, no databases, no dependencies. All state (history, targets, notes) is saved locally in your browser using `localStorage`.
-
----
-
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Action |
-| :--- | :--- |
-| `Ctrl` + `K` | Focus target input |
-| `Ctrl` + `F` | Search dorks |
-| `Ctrl` + `1-0` | Switch between tabs |
-| `Ctrl` + `S` | Save current target |
-| `Escape` | Close modals / cancel launch |
-| `?` | Show shortcuts overlay |
-
----
-
-## 📁 Project Structure
-
-```text
-dorker/
-├── index.html          # Main application UI
-├── README.md           # Documentation
-├── css/
-│   └── styles.css      # Premium styling, variables, theme logic
-├── js/
-│   ├── app.js          # Core application logic & state management
-│   ├── builder.js      # Custom dork builder functionality
-│   ├── dork-engine.js  # Dedicated dork launching logic
-│   ├── methodology.js  # Dynamic command generation for recon
-│   ├── utils.js        # Helper functions & shared utilities
-│   └── data/
-│       └── dorks.js    # Curated JSON array of all Google Dorks
-└── pages/
-    ├── exploits.html   # Exploit and PoC search functionality
-    └── methodology.html # Detailed methodology steps and commands
+```
+██╗  ██╗ █████╗ ██╗  ██╗ ██████╗██╗      █████╗ ██╗    ██╗
+██║  ██║██╔══██╗╚██╗██╔╝██╔════╝██║     ██╔══██╗██║    ██║
+███████║███████║ ╚███╔╝ ██║     ██║     ███████║██║ █╗ ██║
+██╔══██║██╔══██║ ██╔██╗ ██║     ██║     ██╔══██║██║███╗██║
+██║  ██║██║  ██║██╔╝ ██╗╚██████╗███████╗██║  ██║╚███╔███╔╝
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝
 ```
 
+**The all-in-one reconnaissance command center for bug bounty hunters & pentesters.**
+
+[🌐 Live Demo](https://lulublackhat.rf.gd/) · [🐛 Report Bug](https://github.com/kishwordulal1234/hexclaw/issues) · [⭐ Star this Repo](https://github.com/kishwordulal1234/hexclaw)
+
+</div>
+
 ---
 
-## ⚠️ Disclaimer
+<br>
 
-**haxclaw** is built for educational and professional security testing purposes only. You must have explicit permission to scan, test, or exploit any systems you target using this tool. The creator is not responsible for any misuse or legal consequences caused by the use of this software.
+## 〢 What is haxclaw?
+
+**haxclaw** is a fully client-side, zero-dependency recon suite built for serious security researchers. It consolidates your entire reconnaissance workflow into a single, polished interface — from Google dorking and subdomain enumeration to scope checking and findings management.
+
+No installs. No servers. No BS. Just open and hack.
+
+<br>
+
+## 〢 Feature Breakdown
+
+<br>
+
+### 🎯 &nbsp; Advanced Dork Engine
+> Fire precision-crafted Google Dorks directly from your browser.
+
+| Category | Description |
+|:---|:---|
+| `RECON` | Asset discovery & footprinting queries |
+| `FILES` | Exposed documents, configs, and backups |
+| `VULNERABILITIES` | Common misconfigurations & CVE-related patterns |
+| `CMS` | WordPress, Joomla, Drupal & more |
+| `CLOUD` | AWS S3, Azure Blob, GCP exposed buckets |
+| `API` | Exposed API keys, endpoints, and swagger docs |
+| `OSINT` | People, emails, metadata & social exposure |
+| `WEB ARCHIVE` | Historical snapshots & leaked pages |
+
+- 🔥 **Bulk Launch** — Fire an entire category at once with built-in rate-limit delays
+- 🔍 **Search & Filter** — Find any dork instantly across hundreds of entries
+- ⭐ **Favorites** — Star your go-to dorks for rapid access
+
+<br>
+
+### 📋 &nbsp; Bug Bounty Methodology Guide
+> From zero to shell — step by step.
+
+Paste your target domain and haxclaw auto-generates copy-paste ready commands for every phase of recon:
+
+```
+Subdomain Discovery → Port Scanning → HTTP Probing → 
+Vuln Scanning → JS Analysis → Parameter Fuzzing → ...
+```
+
+Built for tools like `subfinder`, `httpx`, `nuclei`, `ffuf`, `gau`, `waybackurls`, and more.
+
+<br>
+
+### 🔧 &nbsp; Custom Dork Builder
+> Build your own dorks like a pro.
+
+Intuitive dropdowns for every Google search operator — `site:`, `inurl:`, `intitle:`, `filetype:`, `ext:` — combined with a live preview and one-click save to your personal dork library.
+
+<br>
+
+### 🛠️ &nbsp; Built-in Recon Toolkit
+
+| Tool | What it does |
+|:---|:---|
+| **Scope Checker** | Paste in-scope wildcards, verify any URL instantly |
+| **Notes & Checklist** | Track findings and progress without leaving the app |
+| **Export System** | Dump your session to `TXT`, `MD`, `JSON`, or raw URLs |
+| **Target Manager** | Save multiple targets and switch between them on the fly |
+
+<br>
+
+## 〢 Quick Start
+
+> haxclaw is 100% client-side. No npm, no pip, no config. Just clone and open.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/kishwordulal1234/hexclaw.git
+
+# 2. Enter the project directory
+cd hexclaw
+
+# 3. Open the app
+open dorker/index.html   # macOS
+xdg-open dorker/index.html  # Linux
+start dorker\index.html  # Windows
+```
+
+Or just visit the **[Live Demo →](https://lulublackhat.rf.gd/)**
+
+> 💡 All data (targets, history, notes, favorites) is stored locally in your browser via `localStorage`. Nothing leaves your machine.
+
+<br>
+
+## 〢 Keyboard Shortcuts
+
+> Built for power users. Keep your hands on the keyboard.
+
+| Shortcut | Action |
+|:---:|:---|
+| `Ctrl` + `K` | Focus target input field |
+| `Ctrl` + `F` | Search dork database |
+| `Ctrl` + `1` — `0` | Switch between tabs |
+| `Ctrl` + `S` | Save current target |
+| `Esc` | Close modals / cancel bulk launch |
+| `?` | Show full shortcuts overlay |
+
+<br>
+
+## 〢 Project Structure
+
+```
+hexclaw/
+├── 📄 dorker.html              # Entry point (root level shortcut)
+├── 📄 LICENSE
+├── 📄 README.md
+│
+└── 📁 dorker/                  # Core application
+    ├── 📄 index.html           # Main UI shell
+    │
+    ├── 📁 css/
+    │   └── styles.css          # Premium styling, CSS variables, dark/light themes
+    │
+    ├── 📁 js/
+    │   ├── app.js              # Core logic & state management
+    │   ├── builder.js          # Custom dork builder
+    │   ├── dork-engine.js      # Dork launch & rate-limiting
+    │   ├── methodology.js      # Dynamic command generation
+    │   ├── utils.js            # Shared helper functions
+    │   └── 📁 data/
+    │       └── dorks.js        # Curated JSON dork library
+    │
+    └── 📁 pages/
+        ├── exploits.html       # Exploit & PoC search
+        └── methodology.html    # Full methodology reference
+```
+
+<br>
+
+## 〢 Stack
+
+```
+Frontend   →   HTML5 + Vanilla JS + CSS3
+Storage    →   Browser localStorage (zero backend)
+Theming    →   CSS custom properties (dark & light)
+Deploy     →   Any static host (Netlify, GitHub Pages, etc.)
+```
+
+<br>
+
+## 〢 Roadmap
+
+- [ ] Firefox extension support
+- [ ] Import/export full sessions as encrypted JSON
+- [ ] Community dork submissions & voting
+- [ ] Integrated Shodan / Fofa / Censys search tabs
+- [ ] Mobile-first responsive redesign
+
+<br>
+
+## 〢 Contributing
+
+Pull requests are welcome. For major changes, open an issue first to discuss what you'd like to change.
+
+```bash
+# Fork → Clone → Branch → PR
+git checkout -b feature/your-feature-name
+```
+
+<br>
+
+## 〢 Legal Disclaimer
+
+> ⚠️ **haxclaw is for authorized security testing and educational use only.**
+>
+> You are solely responsible for ensuring you have explicit written permission before testing any target. The author accepts no liability for misuse, unauthorized access, or any legal consequences arising from the use of this tool. Use responsibly. Stay legal.
+
+<br>
 
 ---
 
-<p align="center">
-  Built with 🖤 for the Bug Bounty Community.
-</p>
+<div align="center">
+
+<br>
+
+```
+[ built with 🖤 for the bug bounty community ]
+```
+
+**[kishwordulal1234](https://github.com/kishwordulal1234)** · MIT License · 2025
+
+<br>
+
+[![Star History](https://img.shields.io/github/stars/kishwordulal1234/hexclaw?style=social)](https://github.com/kishwordulal1234/hexclaw)
+
+</div>
