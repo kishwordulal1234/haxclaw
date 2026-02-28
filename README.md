@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/haxclaw-3d-banner.svg" alt="haxclaw 3D Banner">
+  <img src="dorker/assets/haxclaw-3d-banner.svg" alt="haxclaw 3D Banner">
 </p>
 
 # 🦅 haxclaw // ADVANCED RECON ENGINE
