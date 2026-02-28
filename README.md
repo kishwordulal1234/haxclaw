@@ -16,7 +16,7 @@
 
 [![Version](https://img.shields.io/badge/VERSION-1.0.1-0affed?style=for-the-badge&logo=semver&logoColor=black)](https://github.com/kishwordulal1234/hexclaw)
 [![License](https://img.shields.io/badge/LICENSE-MIT-9b30ff?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
-[![Demo](https://img.shields.io/badge/LIVE_DEMO-ONLINE-00ff88?style=for-the-badge&logo=vercel&logoColor=black)](https://lulublackhat.rf.gd/)
+[![Demo](https://img.shields.io/badge/LIVE_DEMO-ONLINE-00ff88?style=for-the-badge&logo=vercel&logoColor=black)](https://haxclaw.42web.io/?i=1)
 [![HTML](https://img.shields.io/badge/HTML-74.4%25-e34f26?style=for-the-badge&logo=html5&logoColor=white)]()
 [![JavaScript](https://img.shields.io/badge/JS-14.2%25-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)]()
 [![CSS](https://img.shields.io/badge/CSS-11.4%25-264de4?style=for-the-badge&logo=css3&logoColor=white)]()
