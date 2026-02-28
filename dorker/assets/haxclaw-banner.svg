@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280" width="900" height="280">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&amp;family=Share+Tech+Mono&amp;display=swap');
+
+      .bg { fill: #020408; }
+      .grid-line { stroke: rgba(10,255,237,0.06); stroke-width: 1; }
+
+      .title {
+        font-family: 'Orbitron', 'Courier New', monospace;
+        font-weight: 900;
+        font-size: 72px;
+        fill: #0affed;
+        letter-spacing: 12px;
+        filter: url(#glow-cyan);
+      }
+      .subtitle {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 14px;
+        fill: rgba(200,216,232,0.7);
+        letter-spacing: 6px;
+      }
+      .tag {
+        font-family: 'Share Tech Mono', 'Courier New', monospace;
+        font-size: 11px;
+        letter-spacing: 3px;
+      }
+      .bracket { fill: #ff2d78; filter: url(#glow-pink); }
+      .corner-line { stroke: #0affed; stroke-width: 1.5; fill: none; opacity: 0.7; }
+      .scan-line { fill: rgba(10,255,237,0.04); }
+
+      /* PULSE on title */
+      .title {
+        animation: pulse-glow 3s ease-in-out infinite alternate;
+      }
+      @keyframes pulse-glow {
+        0%   { filter: url(#glow-cyan); opacity: 1; }
+        100% { filter: url(#glow-cyan-bright); opacity: 0.85; }
+      }
+
+      /* FLICKER on subtitle */
+      .subtitle {
+        animation: flicker 6s linear infinite;
+      }
+      @keyframes flicker {
+        0%,96%,98%,100% { opacity: 0.7; }
+        97%             { opacity: 0.1; }
+        99%             { opacity: 0.5; }
+      }
+
+      /* SCANLINE sweep */
+      .scan-sweep {
+        animation: sweep 4s linear infinite;
+      }
+      @keyframes sweep {
+        0%   { transform: translateY(-280px); }
+        100% { transform: translateY(280px); }
+      }
+
+      /* CORNER blink */
+      .corner-line {
+        animation: corner-blink 2s ease-in-out infinite alternate;
+      }
+      @keyframes corner-blink {
+        0%   { opacity: 0.3; }
+        100% { opacity: 1; }
+      }
+
+      /* HEX dots pulse */
+      .hex-dot {
+        animation: hex-pulse 2.5s ease-in-out infinite alternate;
+      }
+      .hex-dot:nth-child(2) { animation-delay: 0.4s; }
+      .hex-dot:nth-child(3) { animation-delay: 0.8s; }
+      .hex-dot:nth-child(4) { animation-delay: 1.2s; }
+      .hex-dot:nth-child(5) { animation-delay: 1.6s; }
+      @keyframes hex-pulse {
+        0%   { opacity: 0.2; r: 2; }
+        100% { opacity: 1;   r: 4; }
+      }
+
+      /* SIDE bars */
+      .side-bar {
+        animation: bar-grow 3s ease-in-out infinite alternate;
+      }
+      .side-bar-r { animation: bar-grow 3s ease-in-out infinite alternate-reverse; }
+      @keyframes bar-grow {
+        0%   { opacity: 0.2; }
+        100% { opacity: 0.8; }
+      }
+
+      /* TAG line blink cursor */
+      .cursor-blink {
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        0%,100% { opacity: 1; }
+        50%     { opacity: 0; }
+      }
+    </style>
+
+    <!-- CYAN glow filter -->
+    <filter id="glow-cyan" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-cyan-bright" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- PINK glow filter -->
+    <filter id="glow-pink" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Scanline gradient -->
+    <linearGradient id="scan-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="rgba(10,255,237,0)" />
+      <stop offset="50%"  stop-color="rgba(10,255,237,0.08)" />
+      <stop offset="100%" stop-color="rgba(10,255,237,0)" />
+    </linearGradient>
+
+    <!-- Side bar gradient -->
+    <linearGradient id="bar-grad-l" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="rgba(10,255,237,0)" />
+      <stop offset="100%" stop-color="rgba(10,255,237,0.6)" />
+    </linearGradient>
+    <linearGradient id="bar-grad-r" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="rgba(10,255,237,0.6)" />
+      <stop offset="100%" stop-color="rgba(10,255,237,0)" />
+    </linearGradient>
+
+    <clipPath id="clip-main">
+      <rect width="900" height="280"/>
+    </clipPath>
+  </defs>
+
+  <!-- BACKGROUND -->
+  <rect class="bg" width="900" height="280"/>
+
+  <!-- GRID -->
+  <g clip-path="url(#clip-main)">
+    <!-- vertical lines -->
+    <line class="grid-line" x1="90"  y1="0" x2="90"  y2="280"/>
+    <line class="grid-line" x1="180" y1="0" x2="180" y2="280"/>
+    <line class="grid-line" x1="270" y1="0" x2="270" y2="280"/>
+    <line class="grid-line" x1="360" y1="0" x2="360" y2="280"/>
+    <line class="grid-line" x1="450" y1="0" x2="450" y2="280"/>
+    <line class="grid-line" x1="540" y1="0" x2="540" y2="280"/>
+    <line class="grid-line" x1="630" y1="0" x2="630" y2="280"/>
+    <line class="grid-line" x1="720" y1="0" x2="720" y2="280"/>
+    <line class="grid-line" x1="810" y1="0" x2="810" y2="280"/>
+    <!-- horizontal lines -->
+    <line class="grid-line" x1="0" y1="56"  x2="900" y2="56"/>
+    <line class="grid-line" x1="0" y1="112" x2="900" y2="112"/>
+    <line class="grid-line" x1="0" y1="168" x2="900" y2="168"/>
+    <line class="grid-line" x1="0" y1="224" x2="900" y2="224"/>
+  </g>
+
+  <!-- SCANLINE SWEEP -->
+  <rect class="scan-sweep scan-line" x="0" y="0" width="900" height="60" fill="url(#scan-grad)" clip-path="url(#clip-main)"/>
+
+  <!-- SIDE ACCENT BARS -->
+  <rect class="side-bar"   x="0"   y="80" width="60"  height="1.5" fill="url(#bar-grad-l)"/>
+  <rect class="side-bar"   x="0"   y="140" width="40" height="1.5" fill="url(#bar-grad-l)"/>
+  <rect class="side-bar"   x="0"   y="200" width="80" height="1.5" fill="url(#bar-grad-l)"/>
+  <rect class="side-bar-r" x="840" y="80"  width="60" height="1.5" fill="url(#bar-grad-r)"/>
+  <rect class="side-bar-r" x="860" y="140" width="40" height="1.5" fill="url(#bar-grad-r)"/>
+  <rect class="side-bar-r" x="820" y="200" width="80" height="1.5" fill="url(#bar-grad-r)"/>
+
+  <!-- CORNER BRACKETS top-left -->
+  <polyline class="corner-line" points="20,50 20,20 50,20"/>
+  <!-- top-right -->
+  <polyline class="corner-line" points="850,20 880,20 880,50"/>
+  <!-- bottom-left -->
+  <polyline class="corner-line" points="20,230 20,260 50,260"/>
+  <!-- bottom-right -->
+  <polyline class="corner-line" points="850,260 880,260 880,230"/>
+
+  <!-- HEX DOTS left side -->
+  <g fill="#0affed" filter="url(#glow-cyan)">
+    <circle class="hex-dot" cx="30" cy="100" r="3"/>
+    <circle class="hex-dot" cx="30" cy="130" r="3"/>
+    <circle class="hex-dot" cx="30" cy="160" r="3"/>
+    <circle class="hex-dot" cx="870" cy="100" r="3"/>
+    <circle class="hex-dot" cx="870" cy="130" r="3"/>
+    <circle class="hex-dot" cx="870" cy="160" r="3"/>
+  </g>
+
+  <!-- TOP TAG -->
+  <text class="tag bracket" x="450" y="42" text-anchor="middle">[ PREMIUM RECON SUITE // BUG BOUNTY EDITION ]</text>
+
+  <!-- MAIN TITLE -->
+  <text class="title" x="450" y="160" text-anchor="middle">HAXCLAW</text>
+
+  <!-- SUBTITLE -->
+  <text class="subtitle" x="450" y="198" text-anchor="middle">ADVANCED RECONNAISSANCE ENGINE v1.0.1</text>
+
+  <!-- BOTTOM TAG with blinking cursor -->
+  <text class="tag" x="450" y="240" text-anchor="middle" fill="rgba(155,48,255,0.9)" filter="url(#glow-pink)">
+    ⬡ DORK ENGINE  ·  METHODOLOGY GUIDE  ·  SCOPE CHECKER  ·  EXPORT SYSTEM
+  </text>
+
+  <!-- BOTTOM LINE -->
+  <line x1="100" y1="258" x2="800" y2="258" stroke="rgba(10,255,237,0.15)" stroke-width="1"/>
+  <text class="tag cursor-blink" x="450" y="272" text-anchor="middle" fill="rgba(10,255,237,0.4)">█</text>
+</svg>
