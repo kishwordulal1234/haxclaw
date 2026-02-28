@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+"name": "@kishwordulal1234/haxclaw",
 
 on:
   release:
