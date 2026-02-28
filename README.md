@@ -154,7 +154,7 @@ xdg-open dorker/index.html   # Linux
 start dorker\index.html       # Windows
 ```
 
-Or just hit the **[🌐 Live Demo](https://lulublackhat.rf.gd/)**
+Or just hit the **[🌐 Live Demo](https://haxclaw.42web.io/?i=1)**
 
 ```diff
 + Works in any modern browser
